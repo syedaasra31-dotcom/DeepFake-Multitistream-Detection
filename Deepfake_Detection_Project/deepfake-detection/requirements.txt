@@ -1,0 +1,36 @@
+# Core Deep Learning
+tensorflow>=2.12.0
+keras>=2.12.0
+
+# Computer Vision
+opencv-python>=4.8.0
+mediapipe>=0.10.0
+mtcnn>=0.1.1
+
+# Audio Processing
+librosa>=0.10.0
+moviepy>=1.0.3
+
+# Signal Processing
+scipy>=1.11.0
+numpy>=1.24.0
+
+# Data Science
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# Web Framework
+Flask>=3.0.0
+Werkzeug>=3.0.0
+
+# Utilities
+tqdm>=4.66.0
+Pillow>=10.0.0
+
+# Database (built-in)
+# sqlite3 - included with Python standard library

@@ -1,0 +1,386 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<section style="padding-top: 100px; padding-bottom: 60px; min-height: 100vh;">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="text-center mb-5 fade-in">
+            <span class="d-inline-block px-3 py-1 rounded-pill mb-3"
+                  style="background: rgba(100,255,218,0.1); border: 1px solid rgba(100,255,218,0.3); color: var(--accent); font-size: 0.85rem; font-weight: 500;">
+                <i class="fas fa-gauge-high me-1"></i> Admin Panel
+            </span>
+            <h1 class="section-title">Training Dashboard</h1>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">Monitor model performance, training history, and recent predictions</p>
+        </div>
+
+        <!-- Stats Cards Row -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.05s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="card-icon" style="margin-bottom: 0; width: 52px; height: 52px;">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <span class="d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill" style="background: rgba(100,255,218,0.1); font-size: 0.75rem; color: var(--accent);">
+                            <i class="fas fa-arrow-up" style="font-size: 0.65rem;"></i> 12%
+                        </span>
+                    </div>
+                    <h3 style="color: var(--text-heading); font-weight: 800; font-size: 2rem; margin-bottom: 0.25rem;">{{ stats.total_videos|default(0) }}</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">Total Videos</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.15s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="card-icon" style="margin-bottom: 0; width: 52px; height: 52px; background: rgba(100,255,218,0.1);">
+                            <i class="fas fa-circle-check"></i>
+                        </div>
+                        <span class="d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill" style="background: rgba(100,255,218,0.1); font-size: 0.75rem; color: var(--accent);">
+                            <i class="fas fa-arrow-up" style="font-size: 0.65rem;"></i> 8%
+                        </span>
+                    </div>
+                    <h3 style="color: var(--text-heading); font-weight: 800; font-size: 2rem; margin-bottom: 0.25rem;">{{ stats.real_videos|default(0) }}</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">Real Videos</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.25s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="card-icon" style="margin-bottom: 0; width: 52px; height: 52px; background: rgba(255,107,107,0.1);">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+                        <span class="d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill" style="background: rgba(255,107,107,0.1); font-size: 0.75rem; color: #ff6b6b;">
+                            <i class="fas fa-arrow-up" style="font-size: 0.65rem;"></i> 15%
+                        </span>
+                    </div>
+                    <h3 style="color: var(--text-heading); font-weight: 800; font-size: 2rem; margin-bottom: 0.25rem;">{{ stats.fake_videos|default(0) }}</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">Fake Videos</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.35s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="card-icon" style="margin-bottom: 0; width: 52px; height: 52px; background: rgba(100,181,246,0.1);">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <span class="d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill" style="background: rgba(100,181,246,0.1); font-size: 0.75rem; color: #64b5f6;">
+                            <i class="fas fa-arrow-up" style="font-size: 0.65rem;"></i> 2.3%
+                        </span>
+                    </div>
+                    <h3 style="color: var(--text-heading); font-weight: 800; font-size: 2rem; margin-bottom: 0.25rem;">{{ "%.1f"|format(stats.model_accuracy|default(0)) }}%</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">Model Accuracy</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row g-4 mb-5">
+            <!-- Class Distribution Pie Chart -->
+            <div class="col-lg-5 fade-in-left">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="card-icon" style="margin-bottom: 0; margin-right: 1rem; width: 48px; height: 48px;">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">Class Distribution</h5>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem;">Real vs Fake video breakdown</small>
+                        </div>
+                    </div>
+                    <div style="position: relative; height: 300px; display: flex; align-items: center; justify-content: center;">
+                        <canvas id="classDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Summary Panel -->
+            <div class="col-lg-7 fade-in-right">
+                <div class="card-dark" style="padding: 1.5rem; height: 100%;">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="card-icon" style="margin-bottom: 0; margin-right: 1rem; width: 48px; height: 48px;">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">System Overview</h5>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem;">Current model and dataset status</small>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="fas fa-robot" style="color: var(--accent); font-size: 0.9rem;"></i>
+                                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Active Model</small>
+                                </div>
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin: 0;">{{ active_model|default('Multimodal Fusion v1.0') }}</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="fas fa-microchip" style="color: #64b5f6; font-size: 0.9rem;"></i>
+                                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Framework</small>
+                                </div>
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin: 0;">{{ framework|default('PyTorch + TensorFlow') }}</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="fas fa-database" style="color: #fbbf24; font-size: 0.9rem;"></i>
+                                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Training Samples</small>
+                                </div>
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin: 0;">{{ stats.total_videos|default(0) }} videos</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="fas fa-clock-rotate-left" style="color: #ff6b6b; font-size: 0.9rem;"></i>
+                                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Last Trained</small>
+                                </div>
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin: 0;">{{ last_trained|default('Not yet trained') }}</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="fas fa-layer-group" style="color: var(--accent); font-size: 0.9rem;"></i>
+                                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Input Modalities</small>
+                                </div>
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin: 0;">Lip-Sync + rPPG</h6>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="fas fa-server" style="color: #64b5f6; font-size: 0.9rem;"></i>
+                                    <small style="color: var(--text-secondary); font-size: 0.8rem;">GPU Status</small>
+                                </div>
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin: 0;">{{ gpu_status|default('Not available') }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Training History Table -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 fade-in" style="transition-delay: 0.1s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon" style="margin-bottom: 0; margin-right: 1rem; width: 48px; height: 48px;">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">Training History</h5>
+                                <small style="color: var(--text-secondary); font-size: 0.8rem;">Record of all model training runs</small>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-pill" style="background: rgba(100,255,218,0.1); color: var(--accent); font-size: 0.8rem; font-weight: 500;">
+                            <i class="fas fa-list me-1"></i> {{ training_history|length if training_history else 0 }} records
+                        </span>
+                    </div>
+                    <div style="overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color);">
+                        <table class="table mb-0" style="color: var(--text-primary);">
+                            <thead style="background: var(--bg-tertiary);">
+                                <tr>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Model Name</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Accuracy</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Val Accuracy</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Loss</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Epochs</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Training Time</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if training_history %}
+                                    {% for entry in training_history %}
+                                    <tr style="border-color: var(--border-color); transition: background 0.2s;" onmouseover="this.style.background='rgba(100,255,218,0.03)'" onmouseout="this.style.background='transparent'">
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color); font-weight: 500;">{{ entry.model_name }}</td>
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color);">
+                                            <span style="color: var(--accent); font-weight: 600;">{{ "%.2f"|format(entry.accuracy) }}%</span>
+                                        </td>
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color);">{{ "%.2f"|format(entry.val_accuracy) }}%</td>
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color);">{{ "%.4f"|format(entry.loss) }}</td>
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color);">{{ entry.epochs }}</td>
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color);">{{ entry.training_time }}</td>
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color); color: var(--text-secondary); font-size: 0.88rem;">{{ entry.date }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7" class="text-center py-5" style="color: var(--text-secondary); border-color: var(--border-color);">
+                                            <i class="fas fa-inbox" style="font-size: 2rem; opacity: 0.3; display: block; margin-bottom: 0.75rem;"></i>
+                                            No training history available. Train a model to see results here.
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Predictions Table -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 fade-in" style="transition-delay: 0.2s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon" style="margin-bottom: 0; margin-right: 1rem; width: 48px; height: 48px;">
+                                <i class="fas fa-clock-rotate-left"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">Recent Predictions</h5>
+                                <small style="color: var(--text-secondary); font-size: 0.8rem;">Latest deepfake detection results</small>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-pill" style="background: rgba(100,255,218,0.1); color: var(--accent); font-size: 0.8rem; font-weight: 500;">
+                            <i class="fas fa-list me-1"></i> {{ recent_predictions|length if recent_predictions else 0 }} predictions
+                        </span>
+                    </div>
+                    <div style="overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color);">
+                        <table class="table mb-0" style="color: var(--text-primary);">
+                            <thead style="background: var(--bg-tertiary);">
+                                <tr>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Video Name</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Prediction</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Confidence</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Inference Time</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.9rem 1rem; border-color: var(--border-color);">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if recent_predictions %}
+                                    {% for pred in recent_predictions %}
+                                    <tr style="border-color: var(--border-color); transition: background 0.2s;" onmouseover="this.style.background='rgba(100,255,218,0.03)'" onmouseout="this.style.background='transparent'">
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color); font-weight: 500;">
+                                            <i class="fas fa-video me-2" style="color: var(--accent); font-size: 0.8rem;"></i>{{ pred.video_name }}
+                                        </td>
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color);">
+                                            {% if pred.prediction == 'Real' %}
+                                            <span class="px-3 py-1 rounded-pill" style="background: rgba(100,255,218,0.15); color: #64ffda; font-size: 0.82rem; font-weight: 600;">
+                                                <i class="fas fa-circle-check me-1"></i> Real
+                                            </span>
+                                            {% else %}
+                                            <span class="px-3 py-1 rounded-pill" style="background: rgba(255,107,107,0.15); color: #ff6b6b; font-size: 0.82rem; font-weight: 600;">
+                                                <i class="fas fa-triangle-exclamation me-1"></i> Fake
+                                            </span>
+                                            {% endif %}
+                                        </td>
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color);">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div style="flex: 1; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; min-width: 60px;">
+                                                    <div style="height: 100%; width: {{ pred.confidence }}%; background: {% if pred.prediction == 'Real' %}#64ffda{% else %}#ff6b6b{% endif %}; border-radius: 3px;"></div>
+                                                </div>
+                                                <span style="font-weight: 600; font-size: 0.88rem;">{{ "%.1f"|format(pred.confidence) }}%</span>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color); color: var(--text-secondary);">{{ "%.2f"|format(pred.inference_time) }}s</td>
+                                        <td style="padding: 0.85rem 1rem; border-color: var(--border-color); color: var(--text-secondary); font-size: 0.88rem;">{{ pred.date }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5" style="color: var(--text-secondary); border-color: var(--border-color);">
+                                            <i class="fas fa-search" style="font-size: 2rem; opacity: 0.3; display: block; margin-bottom: 0.75rem;"></i>
+                                            No predictions yet. Upload a video to get started.
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="text-center fade-in" style="transition-delay: 0.3s;">
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{{ url_for('upload') }}" class="btn-accent-filled" style="padding: 0.8rem 2.5rem;">
+                    <i class="fas fa-cloud-arrow-up"></i> Upload New Video
+                </a>
+                <a href="{{ url_for('metrics') }}" class="btn-accent" style="padding: 0.8rem 2.5rem;">
+                    <i class="fas fa-chart-bar"></i> View Metrics
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    Chart.defaults.color = '#8892b0';
+    Chart.defaults.borderColor = 'rgba(35, 53, 84, 0.6)';
+
+    // Class Distribution Pie Chart
+    (function() {
+        var ctx = document.getElementById('classDistributionChart');
+        if (!ctx) return;
+        var data = {{ class_distribution | safe if class_distribution else '{"Real": 0, "Fake": 0}' }};
+        var labels = Object.keys(data);
+        var values = Object.values(data);
+        var colors = ['#64ffda', '#ff6b6b'];
+        var hoverColors = ['#4cd6b4', '#ff5252'];
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: colors,
+                    hoverBackgroundColor: hoverColors,
+                    borderColor: '#112240',
+                    borderWidth: 3,
+                    hoverBorderColor: '#112240',
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#ccd6f6',
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyleWidth: 12,
+                            font: { size: 13, family: 'Inter' }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#112240',
+                        titleColor: '#e6f1ff',
+                        bodyColor: '#ccd6f6',
+                        borderColor: '#233554',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        padding: 12
+                    }
+                },
+                animation: {
+                    animateRotate: true,
+                    animateScale: true,
+                    duration: 1200,
+                    easing: 'easeOutQuart'
+                }
+            }
+        });
+    })();
+</script>
+
+{% endblock %}

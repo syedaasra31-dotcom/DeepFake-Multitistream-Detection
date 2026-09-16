@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+{% block title %}Upload{% endblock %}
+{% block content %}
+
+<!-- Upload Hero -->
+<section style="padding-top: 8rem; padding-bottom: 3rem; position: relative; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, rgba(100,255,218,0.05) 0%, transparent 60%);"></div>
+    <div class="container position-relative" style="z-index: 2;">
+        <div class="text-center fade-in">
+            <span class="d-inline-block px-3 py-1 rounded-pill mb-3"
+                  style="background: rgba(100,255,218,0.1); border: 1px solid rgba(100,255,218,0.3); color: var(--accent); font-size: 0.85rem; font-weight: 500;">
+                <i class="fas fa-cloud-arrow-up me-1"></i> Video Upload
+            </span>
+            <h1 class="section-title" style="font-size: 2.6rem;">Upload Your Video</h1>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">Select or drag-and-drop a video file for deepfake analysis. Supported formats: MP4, AVI, MOV, MKV, WEBM.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Upload Section -->
+<section style="padding: 2rem 0 5rem;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 fade-in">
+                <!-- Upload Card -->
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; padding: 3rem; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), #64b5f6, var(--accent));"></div>
+
+                    <!-- Drag and Drop Zone -->
+                    <div id="dropZone"
+                         style="border: 2px dashed var(--border-color); border-radius: 16px; padding: 3rem 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; margin-bottom: 1.5rem; position: relative;">
+                        <input type="file" id="fileInput" name="file"
+                               accept="video/mp4,video/avi,video/quicktime,video/x-matroska,video/webm,.mp4,.avi,.mov,.mkv,.webm"
+                               style="display: none;">
+                        <div id="dropIcon">
+                            <i class="fas fa-cloud-arrow-up fa-3x" style="color: var(--text-secondary); margin-bottom: 1rem; display: block; transition: all 0.3s ease;"></i>
+                        </div>
+                        <h5 id="dropTitle" style="color: var(--text-heading); font-weight: 600; margin-bottom: 0.5rem;">Drag and drop your video here</h5>
+                        <p id="dropSubtitle" style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 1rem;">or click to browse from your computer</p>
+                        <span class="badge" style="background: rgba(100,255,218,0.1); color: var(--accent); border: 1px solid rgba(100,255,218,0.2); padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                            <i class="fas fa-file-video me-1"></i> MP4, AVI, MOV, MKV, WEBM
+                        </span>
+                    </div>
+
+                    <!-- File Preview (hidden by default) -->
+                    <div id="filePreview" style="display: none; margin-bottom: 1.5rem;">
+                        <div style="background: rgba(100,255,218,0.04); border: 1px solid rgba(100,255,218,0.15); border-radius: 12px; padding: 1.2rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 50px; height: 50px; border-radius: 10px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-file-video" style="color: var(--accent); font-size: 1.2rem;"></i>
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <p id="fileName" style="color: var(--text-heading); font-weight: 600; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">filename.mp4</p>
+                                <p id="fileSize" style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">0 MB</p>
+                            </div>
+                            <button id="removeFile" type="button" class="btn" style="background: rgba(255,107,107,0.1); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.2); border-radius: 8px; padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                                <i class="fas fa-trash-can"></i>
+                            </button>
+                        </div>
+                        <!-- Video Preview -->
+                        <div id="videoPreviewContainer" style="margin-top: 1rem; text-align: center; display: none;">
+                            <video id="videoPreview" controls style="max-width: 100%; max-height: 300px; border-radius: 12px; border: 1px solid var(--border-color);"></video>
+                        </div>
+                    </div>
+
+                    <!-- Validation Info -->
+                    <div style="background: rgba(100,181,246,0.05); border: 1px solid rgba(100,181,246,0.15); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.5rem;">
+                        <h6 style="color: var(--text-heading); font-weight: 600; font-size: 0.9rem; margin-bottom: 0.6rem;">
+                            <i class="fas fa-circle-info me-2" style="color: #64b5f6;"></i>Upload Requirements
+                        </h6>
+                        <div class="row g-2" style="font-size: 0.85rem; color: var(--text-secondary);">
+                            <div class="col-sm-6">
+                                <p style="margin: 0;"><i class="fas fa-check me-2" style="color: var(--accent); font-size: 0.7rem;"></i>Maximum file size: <strong style="color: var(--text-heading);">500 MB</strong></p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p style="margin: 0;"><i class="fas fa-check me-2" style="color: var(--accent); font-size: 0.7rem;"></i>Duration: <strong style="color: var(--text-heading);">Up to 10 minutes</strong></p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p style="margin: 0;"><i class="fas fa-check me-2" style="color: var(--accent); font-size: 0.7rem;"></i>Must contain: <strong style="color: var(--text-heading);">Visible face(s)</strong></p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p style="margin: 0;"><i class="fas fa-check me-2" style="color: var(--accent); font-size: 0.7rem;"></i>Audio track: <strong style="color: var(--text-heading);">Required</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="errorMsg" style="display: none; background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.2); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.5rem;">
+                        <p style="color: #ff6b6b; margin: 0; font-size: 0.9rem;">
+                            <i class="fas fa-triangle-exclamation me-2"></i><span id="errorText">Error message here</span>
+                        </p>
+                    </div>
+
+                    <!-- Upload Button -->
+                    <div class="text-center">
+                        <button id="uploadBtn" type="button" class="btn-accent-filled" disabled
+                                style="padding: 0.85rem 3rem; font-size: 1.05rem; opacity: 0.5; cursor: not-allowed;">
+                            <span id="uploadBtnIcon"><i class="fas fa-magnifying-glass-chart"></i></span>
+                            <span id="uploadBtnText">Analyze Video</span>
+                        </button>
+                    </div>
+
+                    <!-- Progress Bar (hidden by default) -->
+                    <div id="progressContainer" style="display: none; margin-top: 1.5rem;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Uploading...</span>
+                            <span id="progressPercent" style="color: var(--accent); font-weight: 600; font-size: 0.9rem;">0%</span>
+                        </div>
+                        <div style="height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
+                            <div id="progressBar" style="height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), #64b5f6); border-radius: 3px; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="row g-3 mt-4">
+                    <div class="col-md-4 fade-in" style="transition-delay: 0.1s;">
+                        <div class="card-dark text-center" style="padding: 1.5rem;">
+                            <i class="fas fa-lock fa-lg mb-2" style="color: var(--accent);"></i>
+                            <h6 style="color: var(--text-heading); font-weight: 600;">Secure Processing</h6>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">Your videos are processed securely and deleted after analysis.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 fade-in" style="transition-delay: 0.2s;">
+                        <div class="card-dark text-center" style="padding: 1.5rem;">
+                            <i class="fas fa-bolt fa-lg mb-2" style="color: var(--accent);"></i>
+                            <h6 style="color: var(--text-heading); font-weight: 600;">Fast Analysis</h6>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">Results are typically generated within seconds of upload completion.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 fade-in" style="transition-delay: 0.3s;">
+                        <div class="card-dark text-center" style="padding: 1.5rem;">
+                            <i class="fas fa-chart-pie fa-lg mb-2" style="color: var(--accent);"></i>
+                            <h6 style="color: var(--text-heading); font-weight: 600;">Detailed Report</h6>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">Get comprehensive results with confidence scores and visual evidence.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upload JS -->
+<script>
+(function() {
+    var dropZone = document.getElementById("dropZone");
+    var fileInput = document.getElementById("fileInput");
+    var filePreview = document.getElementById("filePreview");
+    var fileName = document.getElementById("fileName");
+    var fileSize = document.getElementById("fileSize");
+    var removeFile = document.getElementById("removeFile");
+    var uploadBtn = document.getElementById("uploadBtn");
+    var uploadBtnText = document.getElementById("uploadBtnText");
+    var uploadBtnIcon = document.getElementById("uploadBtnIcon");
+    var errorMsg = document.getElementById("errorMsg");
+    var errorText = document.getElementById("errorText");
+    var progressContainer = document.getElementById("progressContainer");
+    var progressBar = document.getElementById("progressBar");
+    var progressPercent = document.getElementById("progressPercent");
+    var dropTitle = document.getElementById("dropTitle");
+    var dropSubtitle = document.getElementById("dropSubtitle");
+    var dropIcon = document.getElementById("dropIcon");
+    var videoPreview = document.getElementById("videoPreview");
+    var videoPreviewContainer = document.getElementById("videoPreviewContainer");
+
+    var MAX_SIZE = 500 * 1024 * 1024; // 500MB
+    var ALLOWED_TYPES = ["video/mp4", "video/avi", "video/quicktime", "video/x-matroska", "video/webm", "video/x-msvideo"];
+    var selectedFile = null;
+
+    function formatSize(bytes) {
+        if (bytes === 0) return "0 Bytes";
+        var k = 1024;
+        var sizes = ["Bytes", "KB", "MB", "GB"];
+        var i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    }
+
+    function showError(msg) {
+        errorText.textContent = msg;
+        errorMsg.style.display = "block";
+        setTimeout(function() { errorMsg.style.display = "none"; }, 5000);
+    }
+
+    function handleFile(file) {
+        if (!file) return;
+        if (ALLOWED_TYPES.indexOf(file.type) === -1 && !file.name.match(/\.(mp4|avi|mov|mkv|webm)$/i)) {
+            showError("Invalid file type. Please upload MP4, AVI, MOV, MKV, or WEBM videos.");
+            return;
+        }
+        if (file.size > MAX_SIZE) {
+            showError("File too large. Maximum allowed size is 500 MB.");
+            return;
+        }
+        selectedFile = file;
+        fileName.textContent = file.name;
+        fileSize.textContent = formatSize(file.size);
+        filePreview.style.display = "block";
+        dropZone.style.display = "none";
+        uploadBtn.disabled = false;
+        uploadBtn.style.opacity = "1";
+        uploadBtn.style.cursor = "pointer";
+        errorMsg.style.display = "none";
+
+        // Video preview
+        if (file.type.startsWith("video/")) {
+            var url = URL.createObjectURL(file);
+            videoPreview.src = url;
+            videoPreviewContainer.style.display = "block";
+        }
+    }
+
+    function resetUpload() {
+        selectedFile = null;
+        fileInput.value = "";
+        filePreview.style.display = "none";
+        videoPreviewContainer.style.display = "none";
+        videoPreview.src = "";
+        dropZone.style.display = "block";
+        uploadBtn.disabled = true;
+        uploadBtn.style.opacity = "0.5";
+        uploadBtn.style.cursor = "not-allowed";
+        errorMsg.style.display = "none";
+        progressContainer.style.display = "none";
+        progressBar.style.width = "0%";
+        uploadBtnText.textContent = "Analyze Video";
+        uploadBtnIcon.innerHTML = "<i class="fas fa-magnifying-glass-chart">\</i>";
+        uploadBtn.disabled = false;
+    }
+
+    // Click to browse
+    dropZone.addEventListener("click", function() { fileInput.click(); });
+
+    fileInput.addEventListener("change", function(e) {
+        if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+    });
+
+    // Drag events
+    dropZone.addEventListener("dragover", function(e) {
+        e.preventDefault();
+        dropZone.style.borderColor = "var(--accent)";
+        dropZone.style.background = "rgba(100,255,218,0.04)";
+        dropIcon.innerHTML = "<i class="fas fa-cloud-arrow-up fa-3x" style="color: var(--accent); margin-bottom: 1rem; display: block;">\</i>";
+        dropTitle.textContent = "Drop your video here";
+        dropSubtitle.textContent = "Release to upload";
+    });
+
+    dropZone.addEventListener("dragleave", function(e) {
+        e.preventDefault();
+        dropZone.style.borderColor = "var(--border-color)";
+        dropZone.style.background = "transparent";
+        dropIcon.innerHTML = "<i class="fas fa-cloud-arrow-up fa-3x" style="color: var(--text-secondary); margin-bottom: 1rem; display: block;">\</i>";
+        dropTitle.textContent = "Drag and drop your video here";
+        dropSubtitle.textContent = "or click to browse from your computer";
+    });
+
+    dropZone.addEventListener("drop", function(e) {
+        e.preventDefault();
+        dropZone.style.borderColor = "var(--border-color)";
+        dropZone.style.background = "transparent";
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    });
+
+    // Remove file
+    removeFile.addEventListener("click", function() { resetUpload(); });
+
+    // Upload
+    uploadBtn.addEventListener("click", function() {
+        if (!selectedFile) return;
+        var formData = new FormData();
+        formData.append("file", selectedFile);
+        uploadBtn.disabled = true;
+        uploadBtnText.textContent = "Analyzing...";
+        uploadBtnIcon.innerHTML = "<div class="spinner-border spinner-accent" role="status"><span class="visually-hidden">Loading...\</span></div>";
+        progressContainer.style.display = "block";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{{ url_for("upload") }}", true);
+        xhr.upload.onprogress = function(e) {
+            if (e.lengthComputable) {
+                var pct = Math.round((e.loaded / e.total) * 100);
+                progressBar.style.width = pct + "%";
+                progressPercent.textContent = pct + "%";
+            }
+        };
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var res = JSON.parse(xhr.responseText);
+                if (res.redirect) window.location.href = res.redirect;
+                else showToast("Analysis complete!", "success");
+            } else {
+                showError("Upload failed. Please try again.");
+                resetUpload();
+            }
+        };
+        xhr.onerror = function() {
+            showError("Network error. Please check your connection.");
+            resetUpload();
+        };
+        xhr.send(formData);
+    });
+})();
+</script>
+
+{% endblock %}

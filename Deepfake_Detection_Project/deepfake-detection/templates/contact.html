@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<!-- Contact Hero Section -->
+<section class="contact-hero py-5 mt-5">
+    <div class="container text-center">
+        <div class="fade-in">
+            <h1 class="section-title">Get In <span style="color: var(--accent);">Touch</span></h1>
+            <div class="accent-line"></div>
+            <p class="section-subtitle" style="max-width: 650px;">
+                Have questions about DeepGuard, need technical support, or want to collaborate on deepfake detection research?
+                We'd love to hear from you.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Content -->
+<section class="contact-section pb-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Contact Form -->
+            <div class="col-lg-7 fade-in-left">
+                <div class="card-dark" style="padding: 2.5rem;">
+                    <h4 style="color: var(--text-heading); font-weight: 700; margin-bottom: 0.3rem;">
+                        <i class="fas fa-paper-plane me-2" style="color: var(--accent);"></i>Send a Message
+                    </h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem;">
+                        Fill out the form below and we'll get back to you within 24 hours.
+                    </p>
+
+                    <form id="contactForm" action="#" method="POST">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="contactName" class="form-label" style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 500;">
+                                    Full Name <span style="color: var(--danger);">*</span>
+                                </label>
+                                <div class="input-icon-wrapper">
+                                    <i class="fas fa-user input-icon"></i>
+                                    <input type="text" class="form-control custom-input" id="contactName"
+                                           name="name" placeholder="John Doe" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contactEmail" class="form-label" style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 500;">
+                                    Email Address <span style="color: var(--danger);">*</span>
+                                </label>
+                                <div class="input-icon-wrapper">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                    <input type="email" class="form-control custom-input" id="contactEmail"
+                                           name="email" placeholder="john@example.com" required>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="contactSubject" class="form-label" style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 500;">
+                                    Subject <span style="color: var(--danger);">*</span>
+                                </label>
+                                <div class="input-icon-wrapper">
+                                    <i class="fas fa-tag input-icon"></i>
+                                    <input type="text" class="form-control custom-input" id="contactSubject"
+                                           name="subject" placeholder="How can we help?" required>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="contactMessage" class="form-label" style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 500;">
+                                    Message <span style="color: var(--danger);">*</span>
+                                </label>
+                                <textarea class="form-control custom-input" id="contactMessage"
+                                          name="message" rows="5" placeholder="Describe your question, feedback, or collaboration idea..."
+                                          required style="resize: vertical; min-height: 120px;"></textarea>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn-accent-filled w-100" id="contactSubmitBtn">
+                                    <i class="fas fa-paper-plane"></i> Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-5 fade-in-right">
+                <!-- Project Info Card -->
+                <div class="card-dark mb-4" style="padding: 2rem;">
+                    <h5 style="color: var(--text-heading); font-weight: 700; margin-bottom: 1.5rem;">
+                        <i class="fas fa-circle-info me-2" style="color: var(--accent);"></i>Project Information
+                    </h5>
+                    <ul class="project-info-list">
+                        <li>
+                            <span class="info-label">Project Name</span>
+                            <span class="info-value">DeepGuard</span>
+                        </li>
+                        <li>
+                            <span class="info-label">Version</span>
+                            <span class="info-value">1.0.0</span>
+                        </li>
+                        <li>
+                            <span class="info-label">Technology</span>
+                            <span class="info-value">PyTorch / TensorFlow</span>
+                        </li>
+                        <li>
+                            <span class="info-label">Python</span>
+                            <span class="info-value">3.12+</span>
+                        </li>
+                        <li>
+                            <span class="info-label">Models</span>
+                            <span class="info-value">CNN + LSTM + Fusion</span>
+                        </li>
+                        <li>
+                            <span class="info-label">License</span>
+                            <span class="info-value">MIT</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social Links Card -->
+                <div class="card-dark mb-4" style="padding: 2rem;">
+                    <h5 style="color: var(--text-heading); font-weight: 700; margin-bottom: 1.5rem;">
+                        <i class="fas fa-share-nodes me-2" style="color: var(--accent);"></i>Connect With Us
+                    </h5>
+                    <div class="social-links-grid">
+                        <a href="#" class="social-card">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="#" class="social-card">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                        <a href="#" class="social-card">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="#" class="social-card">
+                            <i class="fab fa-discord"></i>
+                            <span>Discord</span>
+                        </a>
+                        <a href="#" class="social-card">
+                            <i class="fab fa-youtube"></i>
+                            <span>YouTube</span>
+                        </a>
+                        <a href="#" class="social-card">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Contact Card -->
+                <div class="card-dark" style="padding: 2rem;">
+                    <h5 style="color: var(--text-heading); font-weight: 700; margin-bottom: 1.5rem;">
+                        <i class="fas fa-bolt me-2" style="color: var(--accent);"></i>Quick Contact
+                    </h5>
+                    <div class="quick-contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <span style="color: var(--text-secondary); font-size: 0.8rem;">Email</span>
+                            <p style="color: var(--text-primary); margin: 0; font-weight: 500;">support@deepguard.ai</p>
+                        </div>
+                    </div>
+                    <div class="quick-contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <span style="color: var(--text-secondary); font-size: 0.8rem;">Response Time</span>
+                            <p style="color: var(--text-primary); margin: 0; font-weight: 500;">Within 24 hours</p>
+                        </div>
+                    </div>
+                    <div class="quick-contact-item">
+                        <i class="fas fa-location-dot"></i>
+                        <div>
+                            <span style="color: var(--text-secondary); font-size: 0.8rem;">Location</span>
+                            <p style="color: var(--text-primary); margin: 0; font-weight: 500;">Global / Remote</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section py-5">
+    <div class="container">
+        <div class="text-center mb-5 fade-in">
+            <h2 class="section-title">Frequently Asked <span style="color: var(--accent);">Questions</span></h2>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">Find answers to common questions about DeepGuard and deepfake detection.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+                    <!-- FAQ 1 -->
+                    <div class="accordion-item fade-in">
+                        <h2 class="accordion-header" id="faqHeading1">
+                            <button class="accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faqCollapse1"
+                                    aria-expanded="false" aria-controls="faqCollapse1">
+                                <i class="fas fa-microscope me-2" style="color: var(--accent);"></i>
+                                How does DeepGuard detect deepfake videos?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse1" class="accordion-collapse collapse"
+                             aria-labelledby="faqHeading1" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                DeepGuard uses a multimodal approach combining Convolutional Neural Networks (CNN) for spatial
+                                feature extraction, Long Short-Term Memory (LSTM) networks for temporal analysis, and a
+                                feature fusion module. It analyzes lip-sync consistency and remote photoplethysmography
+                                (rPPG) signals to detect subtle physiological inconsistencies that are typically present
+                                in deepfake videos but absent in authentic ones.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="accordion-item fade-in">
+                        <h2 class="accordion-header" id="faqHeading2">
+                            <button class="accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faqCollapse2"
+                                    aria-expanded="false" aria-controls="faqCollapse2">
+                                <i class="fas fa-file-video me-2" style="color: var(--accent);"></i>
+                                What video formats are supported?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse2" class="accordion-collapse collapse"
+                             aria-labelledby="faqHeading2" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                DeepGuard supports all common video formats including MP4, AVI, MOV, MKV, and WMV.
+                                For optimal results, we recommend uploading MP4 files with H.264 encoding.
+                                Videos should ideally be between 5-60 seconds for the best detection accuracy.
+                                Maximum file size is 500MB.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="accordion-item fade-in">
+                        <h2 class="accordion-header" id="faqHeading3">
+                            <button class="accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faqCollapse3"
+                                    aria-expanded="false" aria-controls="faqCollapse3">
+                                <i class="fas fa-gauge-high me-2" style="color: var(--accent);"></i>
+                                What is the detection accuracy?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse3" class="accordion-collapse collapse"
+                             aria-labelledby="faqHeading3" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Our model achieves over 96% accuracy on benchmark datasets. The multimodal fusion approach,
+                                combining lip-sync analysis with rPPG-based physiological signal detection, provides
+                                robust performance even against sophisticated deepfake generation methods.
+                                Visit our Metrics page for detailed performance breakdowns.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div class="accordion-item fade-in">
+                        <h2 class="accordion-header" id="faqHeading4">
+                            <button class="accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faqCollapse4"
+                                    aria-expanded="false" aria-controls="faqCollapse4">
+                                <i class="fas fa-shield-halved me-2" style="color: var(--accent);"></i>
+                                Is my uploaded video data kept private?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse4" class="accordion-collapse collapse"
+                             aria-labelledby="faqHeading4" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Yes. Your privacy is our top priority. Uploaded videos are processed entirely on our
+                                secure servers and are automatically deleted after the analysis is complete.
+                                We do not store, share, or use your uploaded content for any purpose other than
+                                providing the detection result.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 5 -->
+                    <div class="accordion-item fade-in">
+                        <h2 class="accordion-header" id="faqHeading5">
+                            <button class="accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faqCollapse5"
+                                    aria-expanded="false" aria-controls="faqCollapse5">
+                                <i class="fas fa-code me-2" style="color: var(--accent);"></i>
+                                Can I use DeepGuard's API in my own application?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse5" class="accordion-collapse collapse"
+                             aria-labelledby="faqHeading5" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Yes! DeepGuard provides a RESTful API that you can integrate into your own applications.
+                                The API supports video upload, real-time analysis, and batch processing.
+                                Check out our API documentation for authentication, endpoints, rate limits,
+                                and code examples in Python, JavaScript, and cURL.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 6 -->
+                    <div class="accordion-item fade-in">
+                        <h2 class="accordion-header" id="faqHeading6">
+                            <button class="accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#faqCollapse6"
+                                    aria-expanded="false" aria-controls="faqCollapse6">
+                                <i class="fas fa-graduation-cap me-2" style="color: var(--accent);"></i>
+                                What datasets was the model trained on?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse6" class="accordion-collapse collapse"
+                             aria-labelledby="faqHeading6" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                The model was trained on a combination of widely-used deepfake detection benchmark
+                                datasets including FaceForensics++, Celeb-DF, DFDC (Deepfake Detection Challenge),
+                                and DeeperForensics-1.0. This diverse training data ensures strong generalization
+                                across different deepfake generation methods.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form Submission Handler -->
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('contactSubmitBtn');
+        var originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Sending...';
+        btn.disabled = true;
+
+        setTimeout(function() {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            showToast('Message sent successfully! We will get back to you soon.', 'success');
+            document.getElementById('contactForm').reset();
+        }, 1500);
+    });
+</script>
+
+{% endblock %}

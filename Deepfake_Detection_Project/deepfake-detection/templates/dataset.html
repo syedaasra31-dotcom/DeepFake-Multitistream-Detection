@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+{% block title %}Dataset{% endblock %}
+{% block content %}
+
+<section style="padding-top: 100px; padding-bottom: 60px; min-height: 100vh;">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="text-center mb-5 fade-in">
+            <span class="d-inline-block px-3 py-1 rounded-pill mb-3"
+                  style="background: rgba(100,255,218,0.1); border: 1px solid rgba(100,255,218,0.3); color: var(--accent); font-size: 0.85rem; font-weight: 500;">
+                <i class="fas fa-database me-1"></i> Data Overview
+            </span>
+            <h1 class="section-title">Dataset Information</h1>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">Explore the training data, class distributions, and recommended benchmark datasets</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.05s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-film" style="color: var(--accent); font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Total Videos</small>
+                            <h3 style="color: var(--text-heading); font-weight: 800; font-size: 1.8rem; margin: 0;">{{ dataset_stats.total_videos|default(0) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.1s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-circle-check" style="color: var(--accent); font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Real Videos</small>
+                            <h3 style="color: var(--text-heading); font-weight: 800; font-size: 1.8rem; margin: 0;">{{ dataset_stats.real_videos|default(0) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.15s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(255,107,107,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-triangle-exclamation" style="color: #ff6b6b; font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Fake Videos</small>
+                            <h3 style="color: var(--text-heading); font-weight: 800; font-size: 1.8rem; margin: 0;">{{ dataset_stats.fake_videos|default(0) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.2s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(100,181,246,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-hard-drive" style="color: #64b5f6; font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Total Size</small>
+                            <h3 style="color: var(--text-heading); font-weight: 800; font-size: 1.8rem; margin: 0;">{{ dataset_stats.total_size|default('N/A') }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dataset Structure -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 fade-in" style="transition-delay: 0.1s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center mb-4">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-folder-tree" style="font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">Dataset Structure</h5>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem;">Directory layout and organization of the training data</small>
+                        </div>
+                    </div>
+                    <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.9rem; color: var(--accent); border: 1px solid var(--border-color); line-height: 1.8;">
+                        <div><i class="fas fa-folder me-2" style="color: #fbbf24;"></i><span style="color: var(--text-heading); font-weight: 600;">data/</span></div>
+                        <div style="padding-left: 1.5rem;"><i class="fas fa-folder me-2" style="color: #fbbf24;"></i><span style="color: var(--text-heading);">train/</span></div>
+                        <div style="padding-left: 3rem;"><i class="fas fa-folder me-2" style="color: #64ffda;"></i>real/</div>
+                        <div style="padding-left: 3rem;"><i class="fas fa-folder me-2" style="color: #ff6b6b;"></i>fake/</div>
+                        <div style="padding-left: 1.5rem;"><i class="fas fa-folder me-2" style="color: #fbbf24;"></i><span style="color: var(--text-heading);">val/</span></div>
+                        <div style="padding-left: 3rem;"><i class="fas fa-folder me-2" style="color: #64ffda;"></i>real/</div>
+                        <div style="padding-left: 3rem;"><i class="fas fa-folder me-2" style="color: #ff6b6b;"></i>fake/</div>
+                        <div style="padding-left: 1.5rem;"><i class="fas fa-folder me-2" style="color: #fbbf24;"></i><span style="color: var(--text-heading);">test/</span></div>
+                        <div style="padding-left: 3rem;"><i class="fas fa-folder me-2" style="color: #64ffda;"></i>real/</div>
+                        <div style="padding-left: 3rem;"><i class="fas fa-folder me-2" style="color: #ff6b6b;"></i>fake/</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sample Files Tables -->
+        <div class="row g-4 mb-5">
+            <!-- Real Videos Table -->
+            <div class="col-lg-6 fade-in-left" style="transition-delay: 0.1s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-circle-check" style="color: var(--accent); font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">Real Videos</h5>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem;">Sample files from the authentic class</small>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color);">
+                        <table class="table mb-0" style="color: var(--text-primary); font-size: 0.88rem;">
+                            <thead style="background: var(--bg-tertiary);">
+                                <tr>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.8rem 1rem; border-color: var(--border-color);">#</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.8rem 1rem; border-color: var(--border-color);">Filename</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.8rem 1rem; border-color: var(--border-color);">Size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if real_samples %}
+                                    {% for file in real_samples %}
+                                    <tr style="border-color: var(--border-color); transition: background 0.2s;" onmouseover="this.style.background='rgba(100,255,218,0.03)'" onmouseout="this.style.background='transparent'">
+                                        <td style="padding: 0.75rem 1rem; border-color: var(--border-color); color: var(--text-secondary);">{{ loop.index }}</td>
+                                        <td style="padding: 0.75rem 1rem; border-color: var(--border-color);"><i class="fas fa-video me-2" style="color: var(--accent); font-size: 0.75rem;"></i>{{ file.name }}</td>
+                                        <td style="padding: 0.75rem 1rem; border-color: var(--border-color); color: var(--text-secondary);">{{ file.size }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="3" class="text-center py-4" style="color: var(--text-secondary); border-color: var(--border-color);"><i class="fas fa-inbox" style="font-size: 1.5rem; opacity: 0.3; display: block; margin-bottom: 0.5rem;"></i>No samples loaded</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Fake Videos Table -->
+            <div class="col-lg-6 fade-in-right" style="transition-delay: 0.15s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255,107,107,0.1); display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-triangle-exclamation" style="color: #ff6b6b; font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">Fake Videos</h5>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem;">Sample files from the deepfake class</small>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color);">
+                        <table class="table mb-0" style="color: var(--text-primary); font-size: 0.88rem;">
+                            <thead style="background: var(--bg-tertiary);">
+                                <tr>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.8rem 1rem; border-color: var(--border-color);">#</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.8rem 1rem; border-color: var(--border-color);">Filename</th>
+                                    <th style="color: var(--text-heading); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.8rem 1rem; border-color: var(--border-color);">Size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if fake_samples %}
+                                    {% for file in fake_samples %}
+                                    <tr style="border-color: var(--border-color); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,107,107,0.03)'" onmouseout="this.style.background='transparent'">
+                                        <td style="padding: 0.75rem 1rem; border-color: var(--border-color); color: var(--text-secondary);">{{ loop.index }}</td>
+                                        <td style="padding: 0.75rem 1rem; border-color: var(--border-color);"><i class="fas fa-video me-2" style="color: #ff6b6b; font-size: 0.75rem;"></i>{{ file.name }}</td>
+                                        <td style="padding: 0.75rem 1rem; border-color: var(--border-color); color: var(--text-secondary);">{{ file.size }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr><td colspan="3" class="text-center py-4" style="color: var(--text-secondary); border-color: var(--border-color);"><i class="fas fa-inbox" style="font-size: 1.5rem; opacity: 0.3; display: block; margin-bottom: 0.5rem;"></i>No samples loaded</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended Datasets -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 fade-in" style="transition-delay: 0.1s;">
+                <div class="text-center mb-4">
+                    <h3 style="color: var(--text-heading); font-weight: 700; font-size: 1.6rem;">Recommended Benchmark Datasets</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Industry-standard datasets for training and evaluating deepfake detection models</p>
+                </div>
+            </div>
+            <!-- FaceForensics++ -->
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.1s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-masks-theater" style="color: var(--accent); font-size: 1.2rem;"></i>
+                    </div>
+                    <h5 style="color: var(--text-heading); font-weight: 600; margin-bottom: 0.5rem;">FaceForensics++</h5>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem; line-height: 1.7;">Large-scale dataset with 1,000 real videos manipulated by 4 methods: Deepfakes, Face2Face, FaceSwap, and NeuralTextures. Multiple quality tiers available.</p>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="px-2 py-1 rounded-pill" style="background: rgba(100,255,218,0.1); color: var(--accent); font-size: 0.72rem; font-weight: 500;">1,000 videos</span>
+                        <span class="px-2 py-1 rounded-pill" style="background: rgba(100,181,246,0.1); color: #64b5f6; font-size: 0.72rem; font-weight: 500;">4 methods</span>
+                    </div>
+                    <a href="https://github.com/ondyari/FaceForensics" target="_blank" rel="noopener noreferrer" class="btn-accent" style="padding: 0.5rem 1.2rem; font-size: 0.82rem;">
+                        <i class="fas fa-external-link-alt"></i> Visit
+                    </a>
+                </div>
+            </div>
+            <!-- DFDC -->
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.2s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(100,181,246,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-users-viewfinder" style="color: #64b5f6; font-size: 1.2rem;"></i>
+                    </div>
+                    <h5 style="color: var(--text-heading); font-weight: 600; margin-bottom: 0.5rem;">DFDC</h5>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem; line-height: 1.7;">Deepfake Detection Challenge by Meta with over 100,000 videos featuring diverse demographics, lighting conditions, and multiple manipulation techniques.</p>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="px-2 py-1 rounded-pill" style="background: rgba(100,181,246,0.1); color: #64b5f6; font-size: 0.72rem; font-weight: 500;">100K+ videos</span>
+                        <span class="px-2 py-1 rounded-pill" style="background: rgba(251,191,36,0.1); color: #fbbf24; font-size: 0.72rem; font-weight: 500;">Kaggle</span>
+                    </div>
+                    <a href="https://www.kaggle.com/c/deepfake-detection-challenge" target="_blank" rel="noopener noreferrer" class="btn-accent" style="padding: 0.5rem 1.2rem; font-size: 0.82rem;">
+                        <i class="fas fa-external-link-alt"></i> Visit
+                    </a>
+                </div>
+            </div>
+            <!-- Celeb-DF -->
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.3s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(206,147,216,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-star" style="color: #ce93d8; font-size: 1.2rem;"></i>
+                    </div>
+                    <h5 style="color: var(--text-heading); font-weight: 600; margin-bottom: 0.5rem;">Celeb-DF</h5>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem; line-height: 1.7;">High-quality deepfake dataset with celebrity faces. Features visually convincing fakes that are harder to detect, making it ideal for robust model evaluation.</p>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="px-2 py-1 rounded-pill" style="background: rgba(206,147,216,0.1); color: #ce93d8; font-size: 0.72rem; font-weight: 500;">590 videos</span>
+                        <span class="px-2 py-1 rounded-pill" style="background: rgba(100,255,218,0.1); color: var(--accent); font-size: 0.72rem; font-weight: 500;">High quality</span>
+                    </div>
+                    <a href="https://github.com/yuezunli/Celeb-DF" target="_blank" rel="noopener noreferrer" class="btn-accent" style="padding: 0.5rem 1.2rem; font-size: 0.82rem;">
+                        <i class="fas fa-external-link-alt"></i> Visit
+                    </a>
+                </div>
+            </div>
+            <!-- FakeAVCeleb -->
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.4s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255,107,107,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-microphone-lines" style="color: #ff6b6b; font-size: 1.2rem;"></i>
+                    </div>
+                    <h5 style="color: var(--text-heading); font-weight: 600; margin-bottom: 0.5rem;">FakeAVCeleb</h5>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem; line-height: 1.7;">Audio-visual deepfake dataset with paired face and voice manipulation. Essential for multimodal detection research combining visual and auditory analysis.</p>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="px-2 py-1 rounded-pill" style="background: rgba(255,107,107,0.1); color: #ff6b6b; font-size: 0.72rem; font-weight: 500;">Audio+Video</span>
+                        <span class="px-2 py-1 rounded-pill" style="background: rgba(251,191,36,0.1); color: #fbbf24; font-size: 0.72rem; font-weight: 500;">Multimodal</span>
+                    </div>
+                    <a href="https://github.com/FakeAVCeleb/FakeAVCeleb" target="_blank" rel="noopener noreferrer" class="btn-accent" style="padding: 0.5rem 1.2rem; font-size: 0.82rem;">
+                        <i class="fas fa-external-link-alt"></i> Visit
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="text-center fade-in" style="transition-delay: 0.2s;">
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{{ url_for('upload') }}" class="btn-accent-filled" style="padding: 0.8rem 2.5rem;">
+                    <i class="fas fa-cloud-arrow-up"></i> Upload Video
+                </a>
+                <a href="{{ url_for('metrics') }}" class="btn-accent" style="padding: 0.8rem 2.5rem;">
+                    <i class="fas fa-chart-line"></i> View Metrics
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn-accent" style="padding: 0.8rem 2.5rem;">
+                    <i class="fas fa-gauge-high"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+{% block title %}Metrics{% endblock %}
+{% block content %}
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<section style="padding-top: 100px; padding-bottom: 60px; min-height: 100vh;">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="text-center mb-5 fade-in">
+            <span class="d-inline-block px-3 py-1 rounded-pill mb-3"
+                  style="background: rgba(100,255,218,0.1); border: 1px solid rgba(100,255,218,0.3); color: var(--accent); font-size: 0.85rem; font-weight: 500;">
+                <i class="fas fa-chart-line me-1"></i> Model Evaluation
+            </span>
+            <h1 class="section-title">Performance Metrics</h1>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">Comprehensive evaluation of the deepfake detection model performance</p>
+        </div>
+
+        <!-- Metrics Cards Grid -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-3 col-md-4 col-sm-6 fade-in" style="transition-delay: 0.05s;">
+                <div class="card-dark" style="padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(100,255,218,0.06);"></div>
+                    <div style="width: 56px; height: 56px; border-radius: 12px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-bullseye" style="font-size: 1.3rem;"></i>
+                    </div>
+                    <h2 style="color: var(--accent); font-weight: 800; font-size: 2.4rem; margin-bottom: 0.3rem; line-height: 1;">{{ "%.2f"|format(metrics.accuracy|default(0)) }}</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">Accuracy</p>
+                    <div style="margin-top: 0.75rem; height: 3px; background: rgba(100,255,218,0.15); border-radius: 2px;"><div style="height: 100%; width: {{ (metrics.accuracy|default(0) * 100) }}%; background: var(--accent); border-radius: 2px; transition: width 1.2s ease-out;"></div></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 fade-in" style="transition-delay: 0.1s;">
+                <div class="card-dark" style="padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(100,181,246,0.06);"></div>
+                    <div style="width: 56px; height: 56px; border-radius: 12px; background: rgba(100,181,246,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-crosshairs" style="font-size: 1.3rem; color: #64b5f6;"></i>
+                    </div>
+                    <h2 style="color: #64b5f6; font-weight: 800; font-size: 2.4rem; margin-bottom: 0.3rem; line-height: 1;">{{ "%.2f"|format(metrics.precision|default(0)) }}</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">Precision</p>
+                    <div style="margin-top: 0.75rem; height: 3px; background: rgba(100,181,246,0.15); border-radius: 2px;"><div style="height: 100%; width: {{ (metrics.precision|default(0) * 100) }}%; background: #64b5f6; border-radius: 2px; transition: width 1.2s ease-out;"></div></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 fade-in" style="transition-delay: 0.15s;">
+                <div class="card-dark" style="padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(251,191,36,0.06);"></div>
+                    <div style="width: 56px; height: 56px; border-radius: 12px; background: rgba(251,191,36,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-rotate" style="font-size: 1.3rem; color: #fbbf24;"></i>
+                    </div>
+                    <h2 style="color: #fbbf24; font-weight: 800; font-size: 2.4rem; margin-bottom: 0.3rem; line-height: 1;">{{ "%.2f"|format(metrics.recall|default(0)) }}</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">Recall</p>
+                    <div style="margin-top: 0.75rem; height: 3px; background: rgba(251,191,36,0.15); border-radius: 2px;"><div style="height: 100%; width: {{ (metrics.recall|default(0) * 100) }}%; background: #fbbf24; border-radius: 2px; transition: width 1.2s ease-out;"></div></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 fade-in" style="transition-delay: 0.2s;">
+                <div class="card-dark" style="padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(206,147,216,0.06);"></div>
+                    <div style="width: 56px; height: 56px; border-radius: 12px; background: rgba(206,147,216,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-scale-balanced" style="font-size: 1.3rem; color: #ce93d8;"></i>
+                    </div>
+                    <h2 style="color: #ce93d8; font-weight: 800; font-size: 2.4rem; margin-bottom: 0.3rem; line-height: 1;">{{ "%.2f"|format(metrics.f1_score|default(0)) }}</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">F1-Score</p>
+                    <div style="margin-top: 0.75rem; height: 3px; background: rgba(206,147,216,0.15); border-radius: 2px;"><div style="height: 100%; width: {{ (metrics.f1_score|default(0) * 100) }}%; background: #ce93d8; border-radius: 2px; transition: width 1.2s ease-out;"></div></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 fade-in" style="transition-delay: 0.25s;">
+                <div class="card-dark" style="padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(100,255,218,0.06);"></div>
+                    <div style="width: 56px; height: 56px; border-radius: 12px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-chart-area" style="font-size: 1.3rem;"></i>
+                    </div>
+                    <h2 style="color: var(--accent); font-weight: 800; font-size: 2.4rem; margin-bottom: 0.3rem; line-height: 1;">{{ "%.2f"|format(metrics.auc|default(0)) }}</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">AUC-ROC</p>
+                    <div style="margin-top: 0.75rem; height: 3px; background: rgba(100,255,218,0.15); border-radius: 2px;"><div style="height: 100%; width: {{ (metrics.auc|default(0) * 100) }}%; background: var(--accent); border-radius: 2px; transition: width 1.2s ease-out;"></div></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 fade-in" style="transition-delay: 0.3s;">
+                <div class="card-dark" style="padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(255,107,107,0.06);"></div>
+                    <div style="width: 56px; height: 56px; border-radius: 12px; background: rgba(255,107,107,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-grip" style="font-size: 1.3rem; color: #ff6b6b;"></i>
+                    </div>
+                    <h2 style="color: #ff6b6b; font-weight: 800; font-size: 2.4rem; margin-bottom: 0.3rem; line-height: 1;">{{ "%.2f"|format(metrics.mcc|default(0)) }}</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">MCC</p>
+                    <div style="margin-top: 0.75rem; height: 3px; background: rgba(255,107,107,0.15); border-radius: 2px;"><div style="height: 100%; width: 50%; background: #ff6b6b; border-radius: 2px; transition: width 1.2s ease-out;"></div></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 fade-in" style="transition-delay: 0.35s;">
+                <div class="card-dark" style="padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(100,181,246,0.06);"></div>
+                    <div style="width: 56px; height: 56px; border-radius: 12px; background: rgba(100,181,246,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-handshake" style="font-size: 1.3rem; color: #64b5f6;"></i>
+                    </div>
+                    <h2 style="color: #64b5f6; font-weight: 800; font-size: 2.4rem; margin-bottom: 0.3rem; line-height: 1;">{{ "%.2f"|format(metrics.cohens_kappa|default(0)) }}</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">Cohen's Kappa</p>
+                    <div style="margin-top: 0.75rem; height: 3px; background: rgba(100,181,246,0.15); border-radius: 2px;"><div style="height: 100%; width: 50%; background: #64b5f6; border-radius: 2px; transition: width 1.2s ease-out;"></div></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 fade-in" style="transition-delay: 0.4s;">
+                <div class="card-dark" style="padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(251,191,36,0.06);"></div>
+                    <div style="width: 56px; height: 56px; border-radius: 12px; background: rgba(251,191,36,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-stopwatch" style="font-size: 1.3rem; color: #fbbf24;"></i>
+                    </div>
+                    <h2 style="color: #fbbf24; font-weight: 800; font-size: 2.4rem; margin-bottom: 0.3rem; line-height: 1;">{{ "%.2f"|format(metrics.inference_time|default(0)) }}<span style="font-size: 1rem; font-weight: 500;">s</span></h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">Inference Time</p>
+                    <div style="margin-top: 0.75rem; height: 3px; background: rgba(251,191,36,0.15); border-radius: 2px;"><div style="height: 100%; width: 30%; background: #fbbf24; border-radius: 2px; transition: width 1.2s ease-out;"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics Bar Chart -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 fade-in">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-chart-bar" style="font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">All Metrics Comparison</h5>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem;">Visual comparison of all evaluation metrics (normalized)</small>
+                        </div>
+                    </div>
+                    <div style="position: relative; height: 320px;"><canvas id="metricsBarChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plot Images Section -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 fade-in">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center mb-4">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-images" style="font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">Evaluation Plots</h5>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem;">Generated visualizations from model evaluation</small>
+                        </div>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-lg-6 col-md-6 fade-in" style="transition-delay: 0.1s;">
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 1rem;"><i class="fas fa-table-cells me-2" style="color: var(--accent);"></i>Confusion Matrix</h6>
+                                {% if plot_images.confusion_matrix %}
+                                <img src="{{ url_for('static', filename=plot_images.confusion_matrix) }}" alt="Confusion Matrix" style="width: 100%; border-radius: 8px; background: #fff;">
+                                {% else %}
+                                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 3rem; text-align: center;">
+                                    <i class="fas fa-chart-simple" style="font-size: 2rem; color: var(--text-secondary); opacity: 0.3;"></i>
+                                    <p class="mt-2 mb-0" style="color: var(--text-secondary); font-size: 0.9rem;">Not yet generated</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 fade-in" style="transition-delay: 0.15s;">
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 1rem;"><i class="fas fa-chart-line me-2" style="color: #64b5f6;"></i>ROC Curve</h6>
+                                {% if plot_images.roc_curve %}
+                                <img src="{{ url_for('static', filename=plot_images.roc_curve) }}" alt="ROC Curve" style="width: 100%; border-radius: 8px; background: #fff;">
+                                {% else %}
+                                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 3rem; text-align: center;">
+                                    <i class="fas fa-chart-simple" style="font-size: 2rem; color: var(--text-secondary); opacity: 0.3;"></i>
+                                    <p class="mt-2 mb-0" style="color: var(--text-secondary); font-size: 0.9rem;">Not yet generated</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 fade-in" style="transition-delay: 0.2s;">
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 1rem;"><i class="fas fa-chart-column me-2" style="color: #fbbf24;"></i>Training History</h6>
+                                {% if plot_images.training_history %}
+                                <img src="{{ url_for('static', filename=plot_images.training_history) }}" alt="Training History" style="width: 100%; border-radius: 8px; background: #fff;">
+                                {% else %}
+                                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 3rem; text-align: center;">
+                                    <i class="fas fa-chart-simple" style="font-size: 2rem; color: var(--text-secondary); opacity: 0.3;"></i>
+                                    <p class="mt-2 mb-0" style="color: var(--text-secondary); font-size: 0.9rem;">Not yet generated</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 fade-in" style="transition-delay: 0.25s;">
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 1rem;"><i class="fas fa-wave-square me-2" style="color: #ce93d8;"></i>Precision-Recall Curve</h6>
+                                {% if plot_images.pr_curve %}
+                                <img src="{{ url_for('static', filename=plot_images.pr_curve) }}" alt="PR Curve" style="width: 100%; border-radius: 8px; background: #fff;">
+                                {% else %}
+                                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 3rem; text-align: center;">
+                                    <i class="fas fa-chart-simple" style="font-size: 2rem; color: var(--text-secondary); opacity: 0.3;"></i>
+                                    <p class="mt-2 mb-0" style="color: var(--text-secondary); font-size: 0.9rem;">Not yet generated</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="text-center fade-in" style="transition-delay: 0.3s;">
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{{ url_for('dashboard') }}" class="btn-accent" style="padding: 0.8rem 2.5rem;"><i class="fas fa-gauge-high"></i> Dashboard</a>
+                <a href="{{ url_for('upload') }}" class="btn-accent-filled" style="padding: 0.8rem 2.5rem;"><i class="fas fa-cloud-arrow-up"></i> Test Model</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+Chart.defaults.color = '#8892b0';
+Chart.defaults.borderColor = 'rgba(35, 53, 84, 0.6)';
+
+(function() {
+    var ctx = document.getElementById('metricsBarChart');
+    if (!ctx) return;
+    var m = {{ metrics | tojson | safe if metrics else '{}' }};
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'AUC-ROC', 'MCC', 'Kappa'],
+            datasets: [{
+                label: 'Score',
+                data: [
+                    (m.accuracy || 0),
+                    (m.precision || 0),
+                    (m.recall || 0),
+                    (m.f1_score || 0),
+                    (m.auc || 0),
+                    Math.max(0, (m.mcc || 0) + 1) / 2,
+                    Math.max(0, (m.cohens_kappa || 0) + 1) / 2
+                ],
+                backgroundColor: [
+                    'rgba(100, 255, 218, 0.7)',
+                    'rgba(100, 181, 246, 0.7)',
+                    'rgba(251, 191, 36, 0.7)',
+                    'rgba(206, 147, 216, 0.7)',
+                    'rgba(100, 255, 218, 0.5)',
+                    'rgba(255, 107, 107, 0.7)',
+                    'rgba(100, 181, 246, 0.5)'
+                ],
+                borderColor: [
+                    '#64ffda', '#64b5f6', '#fbbf24', '#ce93d8', '#64ffda', '#ff6b6b', '#64b5f6'
+                ],
+                borderWidth: 1,
+                borderRadius: 6,
+                barPercentage: 0.6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { backgroundColor: '#112240', titleColor: '#e6f1ff', bodyColor: '#ccd6f6', borderColor: '#233554', borderWidth: 1, cornerRadius: 8, padding: 12 }
+            },
+            scales: {
+                y: { beginAtZero: true, max: 1, grid: { color: 'rgba(35, 53, 84, 0.4)' }, ticks: { callback: function(v) { return (v * 100).toFixed(0) + '%'; } } },
+                x: { grid: { display: false } }
+            },
+            animation: { duration: 1500, easing: 'easeOutQuart' }
+        }
+    });
+})();
+</script>
+
+{% endblock %}

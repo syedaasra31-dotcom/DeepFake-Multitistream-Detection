@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Server Error | DeepGuard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a192f;
+            --bg-secondary: #112240;
+            --bg-tertiary: #1a3050;
+            --accent: #64ffda;
+            --accent-hover: #4cd6b4;
+            --text-primary: #ccd6f6;
+            --text-secondary: #8892b0;
+            --text-heading: #e6f1ff;
+            --border-color: #233554;
+            --danger: #ff6b6b;
+            --danger-glow: rgba(255, 107, 107, 0.3);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background grid */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 107, 107, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 107, 107, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.12;
+            z-index: 0;
+        }
+        .orb-1 {
+            width: 350px;
+            height: 350px;
+            background: var(--danger);
+            top: -80px;
+            left: -80px;
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 280px;
+            height: 280px;
+            background: #fbbf24;
+            bottom: -60px;
+            right: -60px;
+            animation: orbFloat 10s ease-in-out infinite reverse;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(25px, -25px) scale(1.1); }
+        }
+
+        .error-container {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+            max-width: 600px;
+        }
+
+        .error-code-wrapper {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .error-code {
+            font-size: 10rem;
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--danger) 0%, #fbbf24 50%, var(--text-heading) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            position: relative;
+            animation: errorPulse 3s ease-in-out infinite;
+            user-select: none;
+        }
+
+        @keyframes errorPulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.02); filter: brightness(1.1); }
+        }
+
+        .error-icon {
+            font-size: 3.5rem;
+            color: var(--danger);
+            margin-bottom: 1.5rem;
+            animation: iconSpin 4s linear infinite;
+            display: block;
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .error-title {
+            color: var(--text-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 0.8rem;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .error-note {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            opacity: 0.7;
+            margin-bottom: 2.5rem;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2.2rem;
+            background-color: var(--accent);
+            color: var(--bg-primary) !important;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .btn-home:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(100, 255, 218, 0.3);
+        }
+
+        .btn-retry {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2.2rem;
+            background-color: transparent;
+            color: var(--danger);
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 2px solid rgba(255, 107, 107, 0.4);
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .btn-retry:hover {
+            border-color: var(--danger);
+            background-color: rgba(255, 107, 107, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .error-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--danger);
+            margin: 0 auto 1.5rem;
+            border-radius: 2px;
+            opacity: 0.6;
+        }
+
+        /* Error ID badge */
+        .error-id {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 107, 107, 0.08);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            border-radius: 8px;
+            padding: 0.4rem 1rem;
+            margin-bottom: 2rem;
+            font-size: 0.8rem;
+            color: var(--danger);
+            font-family: 'Courier New', monospace;
+        }
+
+        .error-footer {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            z-index: 1;
+            opacity: 0.6;
+        }
+        .error-footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .error-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Scanline overlay */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.03) 2px,
+                rgba(0, 0, 0, 0.03) 4px
+            );
+        }
+
+        @media (max-width: 576px) {
+            .error-code { font-size: 6rem; }
+            .error-title { font-size: 1.4rem; }
+            .error-message { font-size: 0.95rem; }
+            .error-actions { flex-direction: column; align-items: center; }
+            .btn-home, .btn-retry { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="scanlines"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="error-container">
+        <div class="error-code-wrapper">
+            <i class="fas fa-triangle-exclamation error-icon"></i>
+            <div class="error-code">500</div>
+        </div>
+        <div class="error-divider"></div>
+        <h1 class="error-title">Internal Server Error</h1>
+        <p class="error-message">
+            Something went wrong on our end. Our servers encountered an unexpected
+            condition that prevented them from fulfilling the request.
+        </p>
+        <div class="error-id">
+            <i class="fas fa-fingerprint"></i>
+            Error ID: SRV-<span id="errorTimestamp"></span>
+        </div>
+        <p class="error-note">
+            Our team has been automatically notified and is working to resolve this.
+            Please try again in a few moments.
+        </p>
+        <div class="error-actions">
+            <a href="/" class="btn-home">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+            <a href="javascript:location.reload()" class="btn-retry">
+                <i class="fas fa-rotate-right"></i> Retry Page
+            </a>
+        </div>
+    </div>
+
+    <div class="error-footer">
+        <a href="/">DeepGuard</a> &mdash; AI Deepfake Detection System
+    </div>
+
+    <script>
+        document.getElementById('errorTimestamp').textContent =
+            Date.now().toString(36).toUpperCase().slice(-8);
+    </script>
+</body>
+</html>

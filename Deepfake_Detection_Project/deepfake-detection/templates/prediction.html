@@ -1,0 +1,452 @@
+{% extends "base.html" %}
+{% block title %}Prediction Results{% endblock %}
+{% block content %}
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<section style="padding-top: 100px; padding-bottom: 60px; min-height: 100vh;">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="text-center mb-5 fade-in">
+            <span class="d-inline-block px-3 py-1 rounded-pill mb-3"
+                  style="background: rgba(100,255,218,0.1); border: 1px solid rgba(100,255,218,0.3); color: var(--accent); font-size: 0.85rem; font-weight: 500;">
+                <i class="fas fa-microscope me-1"></i> Analysis Complete
+            </span>
+            <h1 class="section-title">Prediction Results</h1>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">Detailed multimodal analysis of your uploaded video</p>
+        </div>
+
+        <!-- Top Row: Video Player & Detected Face -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-7 fade-in-left">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="card-icon" style="margin-bottom: 0; margin-right: 1rem;">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading);">Uploaded Video</h5>
+                            <small style="color: var(--text-secondary);">{{ video_info.name if video_info else 'Unknown' }}</small>
+                        </div>
+                    </div>
+                    <div style="background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center;">
+                        {% if video_info and video_info.path %}
+                        <video controls style="width: 100%; height: 100%; object-fit: contain;">
+                            <source src="{{ url_for('static', filename=video_info.path) }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        {% else %}
+                        <div class="text-center p-4">
+                            <i class="fas fa-film" style="font-size: 3rem; color: var(--text-secondary); opacity: 0.3;"></i>
+                            <p class="mt-2 mb-0" style="color: var(--text-secondary);">Video preview unavailable</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex justify-content-between mt-3 flex-wrap gap-2">
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">
+                            <i class="fas fa-image me-1" style="color: var(--accent);"></i> {{ frames_count }} frames analyzed
+                        </span>
+                        {% if video_info and video_info.duration %}
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">
+                            <i class="fas fa-clock me-1" style="color: var(--accent);"></i> {{ video_info.duration }}s duration
+                        </span>
+                        {% endif %}
+                        {% if video_info and video_info.resolution %}
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">
+                            <i class="fas fa-expand me-1" style="color: var(--accent);"></i> {{ video_info.resolution }}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 fade-in-right">
+                <div class="card-dark" style="padding: 1.5rem; height: 100%; display: flex; flex-direction: column;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="card-icon" style="margin-bottom: 0; margin-right: 1rem;">
+                            <i class="fas fa-face-smile"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading);">Detected Face</h5>
+                            <small style="color: var(--text-secondary);">Primary face region extracted</small>
+                        </div>
+                    </div>
+                    <div style="flex: 1; background: var(--bg-primary); border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 280px;">
+                        {% if face_image_path %}
+                        <img src="{{ url_for('static', filename=face_image_path) }}" alt="Detected Face"
+                             style="max-width: 100%; max-height: 320px; object-fit: contain; border-radius: 8px;">
+                        {% else %}
+                        <div class="text-center p-4">
+                            <i class="fas fa-user" style="font-size: 3rem; color: var(--text-secondary); opacity: 0.3;"></i>
+                            <p class="mt-2 mb-0" style="color: var(--text-secondary);">No face detected</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mt-3">
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">
+                            <i class="fas fa-crop-simple me-1" style="color: var(--accent);"></i>
+                            Face extracted for lip-sync and rPPG analysis
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Row: Charts -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6 fade-in-left" style="transition-delay: 0.1s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="card-icon" style="margin-bottom: 0; margin-right: 1rem; width: 48px; height: 48px;">
+                            <i class="fas fa-lips" style="font-size: 1.2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">Lip Motion Over Time</h5>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem;">Mouth landmark displacement analysis</small>
+                        </div>
+                    </div>
+                    <div style="position: relative; height: 260px;">
+                        <canvas id="lipMotionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 fade-in-right" style="transition-delay: 0.2s;">
+                <div class="card-dark" style="padding: 1.5rem;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="card-icon" style="margin-bottom: 0; margin-right: 1rem; width: 48px; height: 48px;">
+                            <i class="fas fa-heart-pulse"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">Heart Pulse Signal (rPPG)</h5>
+                            <small style="color: var(--text-secondary); font-size: 0.8rem;">Remote photoplethysmography waveform</small>
+                        </div>
+                    </div>
+                    <div style="position: relative; height: 260px;">
+                        <canvas id="pulseChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom: Prediction Result Card -->
+        <div class="row g-4 mb-5">
+            <!-- Main Prediction Card -->
+            <div class="col-lg-5 fade-in" style="transition-delay: 0.1s;">
+                <div class="card-dark" style="padding: 2rem; text-align: center; position: relative; overflow: hidden; border-width: 2px; border-color: {% if prediction == 'Real' %}#64ffda{% else %}#ff6b6b{% endif %};">
+                    <!-- Background glow -->
+                    <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, {% if prediction == 'Real' %}rgba(100,255,218,0.06){% else %}rgba(255,107,107,0.06){% endif %} 0%, transparent 60%); pointer-events: none;"></div>
+                    <div style="position: relative; z-index: 1;">
+                        <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; position: relative; border: 4px solid {% if prediction == 'Real' %}#64ffda{% else %}#ff6b6b{% endif %};">
+                            <!-- Circular progress gauge -->
+                            <svg width="120" height="120" style="position: absolute; top: 0; left: 0; transform: rotate(-90deg);">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="6"/>
+                                <circle cx="60" cy="60" r="54" fill="none"
+                                        stroke="{% if prediction == 'Real' %}#64ffda{% else %}#ff6b6b{% endif %}"
+                                        stroke-width="6" stroke-linecap="round"
+                                        stroke-dasharray="339.292"
+                                        stroke-dashoffset="{{ (339.292 * (1 - confidence / 100)) | round(2) }}"
+                                        style="transition: stroke-dashoffset 1.5s ease-out;"/>
+                            </svg>
+                            <span style="font-size: 2rem; font-weight: 800; color: {% if prediction == 'Real' %}#64ffda{% else %}#ff6b6b{% endif %};">
+                                {{ "%.1f"|format(confidence) }}%
+                            </span>
+                        </div>
+                        <h2 style="font-weight: 800; font-size: 2.4rem; margin-bottom: 0.5rem; color: {% if prediction == 'Real' %}#64ffda{% else %}#ff6b6b{% endif %};">
+                            <i class="fas {% if prediction == 'Real' %}fa-circle-check{% else %}fa-triangle-exclamation{% endif %} me-2"></i>
+                            {{ prediction }}
+                        </h2>
+                        <p style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.5rem;">
+                            {% if prediction == 'Real' %}
+                            This video appears to be authentic with no signs of deepfake manipulation.
+                            {% else %}
+                            This video shows strong indicators of deepfake manipulation.
+                            {% endif %}
+                        </p>
+                        <div class="d-flex align-items-center justify-content-center gap-2 mb-4" style="font-size: 0.9rem;">
+                            <i class="fas fa-bolt" style="color: var(--accent);"></i>
+                            <span style="color: var(--text-secondary);">Inference Time:</span>
+                            <strong style="color: var(--text-heading);">{{ "%.2f"|format(inference_time) }}s</strong>
+                        </div>
+                        <div class="d-flex gap-3 justify-content-center flex-wrap">
+                            <a href="{{ url_for('upload') }}" class="btn-accent">
+                                <i class="fas fa-arrow-left"></i> New Upload
+                            </a>
+                            <button onclick="downloadReport()" class="btn-accent-filled">
+                                <i class="fas fa-file-arrow-down"></i> Download Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grad-CAM & Detailed Metrics -->
+            <div class="col-lg-7 fade-in" style="transition-delay: 0.3s;">
+                <div class="row g-4">
+                    <!-- Grad-CAM Heatmap -->
+                    <div class="col-12">
+                        <div class="card-dark" style="padding: 1.5rem;">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="card-icon" style="margin-bottom: 0; margin-right: 1rem; width: 48px; height: 48px;">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0" style="color: var(--text-heading); font-size: 1.05rem;">Grad-CAM Heatmap</h5>
+                                    <small style="color: var(--text-secondary); font-size: 0.8rem;">Model attention visualization</small>
+                                </div>
+                            </div>
+                            {% if gradcam_path %}
+                            <div style="background: var(--bg-primary); border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; max-height: 280px;">
+                                <img src="{{ url_for('static', filename=gradcam_path) }}" alt="Grad-CAM Heatmap"
+                                     style="max-width: 100%; max-height: 280px; object-fit: contain; border-radius: 8px;">
+                            </div>
+                            {% else %}
+                            <div style="background: var(--bg-primary); border-radius: 12px; padding: 3rem; text-align: center;">
+                                <i class="fas fa-image" style="font-size: 2.5rem; color: var(--text-secondary); opacity: 0.3;"></i>
+                                <p class="mt-2 mb-0" style="color: var(--text-secondary);">Grad-CAM not available</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Detailed Metrics Row -->
+                    <div class="col-md-6">
+                        <div class="card-dark" style="padding: 1.25rem;">
+                            <div class="d-flex align-items-center gap-3">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i class="fas fa-lips" style="color: var(--accent); font-size: 1.1rem;"></i>
+                                </div>
+                                <div>
+                                    <small style="color: var(--text-secondary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px;">Lip Sync Score</small>
+                                    <h4 class="mb-0" style="color: var(--text-heading); font-weight: 700;">{{ "%.2f"|format(lip_sync_score|default(0)) }}</h4>
+                                </div>
+                            </div>
+                            <div style="margin-top: 0.75rem; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;">
+                                <div style="height: 100%; width: {{ (lip_sync_score|default(0) * 100) | round(0) }}%; background: var(--accent); border-radius: 2px; transition: width 1.2s ease-out;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-dark" style="padding: 1.25rem;">
+                            <div class="d-flex align-items-center gap-3">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255,107,107,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i class="fas fa-heartbeat" style="color: #ff6b6b; font-size: 1.1rem;"></i>
+                                </div>
+                                <div>
+                                    <small style="color: var(--text-secondary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px;">Heart Rate (BPM)</small>
+                                    <h4 class="mb-0" style="color: var(--text-heading); font-weight: 700;">{{ heart_rate|default('N/A') }}</h4>
+                                </div>
+                            </div>
+                            <div style="margin-top: 0.75rem; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;">
+                                <div style="height: 100%; width: 65%; background: #ff6b6b; border-radius: 2px; transition: width 1.2s ease-out;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-dark" style="padding: 1.25rem;">
+                            <div class="d-flex align-items-center gap-3">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(251,191,36,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i class="fas fa-wave-square" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                </div>
+                                <div>
+                                    <small style="color: var(--text-secondary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px;">Pulse Stability</small>
+                                    <h4 class="mb-0" style="color: var(--text-heading); font-weight: 700;">{{ "%.2f"|format(pulse_stability|default(0)) }}</h4>
+                                </div>
+                            </div>
+                            <div style="margin-top: 0.75rem; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;">
+                                <div style="height: 100%; width: {{ (pulse_stability|default(0) * 100) | round(0) }}%; background: #fbbf24; border-radius: 2px; transition: width 1.2s ease-out;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-dark" style="padding: 1.25rem;">
+                            <div class="d-flex align-items-center gap-3">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(100,181,246,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i class="fas fa-signal" style="color: #64b5f6; font-size: 1.1rem;"></i>
+                                </div>
+                                <div>
+                                    <small style="color: var(--text-secondary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px;">rPPG Confidence</small>
+                                    <h4 class="mb-0" style="color: var(--text-heading); font-weight: 700;">{{ "%.2f"|format(rppg_confidence|default(0)) }}</h4>
+                                </div>
+                            </div>
+                            <div style="margin-top: 0.75rem; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;">
+                                <div style="height: 100%; width: {{ (rppg_confidence|default(0) * 100) | round(0) }}%; background: #64b5f6; border-radius: 2px; transition: width 1.2s ease-out;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center fade-in" style="transition-delay: 0.4s;">
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{{ url_for('upload') }}" class="btn-accent" style="padding: 0.8rem 2.5rem;">
+                    <i class="fas fa-arrow-left"></i> Back to Upload
+                </a>
+                <a href="{{ url_for('index') }}" class="btn-accent" style="padding: 0.8rem 2.5rem;">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <button onclick="downloadReport()" class="btn-accent-filled" style="padding: 0.8rem 2.5rem;">
+                    <i class="fas fa-file-pdf"></i> Download Full Report
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Chart.js global defaults for dark theme
+    Chart.defaults.color = '#8892b0';
+    Chart.defaults.borderColor = 'rgba(35, 53, 84, 0.6)';
+
+    // Lip Motion Chart
+    (function() {
+        var ctx = document.getElementById('lipMotionChart');
+        if (!ctx) return;
+        var data = {{ lip_motion_data | safe if lip_motion_data else '[]' }};
+        var labels = data.map(function(_, i) { return i + 1; });
+        var values = data.map(function(d) { return Array.isArray(d) ? d[1] : d; });
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Lip Motion Displacement',
+                    data: values,
+                    borderColor: '#64ffda',
+                    backgroundColor: 'rgba(100, 255, 218, 0.08)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: '#64ffda'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#112240',
+                        titleColor: '#e6f1ff',
+                        bodyColor: '#ccd6f6',
+                        borderColor: '#233554',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        padding: 10
+                    }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Frame', color: '#8892b0' },
+                        grid: { color: 'rgba(35, 53, 84, 0.4)' },
+                        ticks: { maxTicksLimit: 15 }
+                    },
+                    y: {
+                        title: { display: true, text: 'Displacement (px)', color: '#8892b0' },
+                        grid: { color: 'rgba(35, 53, 84, 0.4)' }
+                    }
+                },
+                interaction: { intersect: false, mode: 'index' }
+            }
+        });
+    })();
+
+    // Pulse Signal Chart
+    (function() {
+        var ctx = document.getElementById('pulseChart');
+        if (!ctx) return;
+        var data = {{ pulse_data | safe if pulse_data else '[]' }};
+        var labels = data.map(function(_, i) { return i + 1; });
+        var values = data.map(function(d) { return Array.isArray(d) ? d[1] : d; });
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Pulse Amplitude',
+                    data: values,
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'rgba(255, 107, 107, 0.08)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 0,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: '#ff6b6b'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#112240',
+                        titleColor: '#e6f1ff',
+                        bodyColor: '#ccd6f6',
+                        borderColor: '#233554',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        padding: 10
+                    }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Frame', color: '#8892b0' },
+                        grid: { color: 'rgba(35, 53, 84, 0.4)' },
+                        ticks: { maxTicksLimit: 15 }
+                    },
+                    y: {
+                        title: { display: true, text: 'Amplitude', color: '#8892b0' },
+                        grid: { color: 'rgba(35, 53, 84, 0.4)' }
+                    }
+                },
+                interaction: { intersect: false, mode: 'index' }
+            }
+        });
+    })();
+
+    // Download report function
+    function downloadReport() {
+        var reportContent = [
+            '===========================================',
+            '   DEEPGUARD - DEEPFAKE DETECTION REPORT',
+            '===========================================',
+            '',
+            'Generated: ' + new Date().toISOString(),
+            '',
+            '--- Video Information ---',
+            'File: {{ video_info.name if video_info else "Unknown" }}',
+            'Frames Analyzed: {{ frames_count }}',
+            '',
+            '--- Prediction Results ---',
+            'Verdict: {{ prediction }}',
+            'Confidence: {{ "%.2f"|format(confidence) }}%',
+            'Inference Time: {{ "%.2f"|format(inference_time) }}s',
+            '',
+            '--- Detailed Metrics ---',
+            'Lip Sync Score: {{ "%.4f"|format(lip_sync_score|default(0)) }}',
+            'Heart Rate: {{ heart_rate|default("N/A") }}',
+            'Pulse Stability: {{ "%.4f"|format(pulse_stability|default(0)) }}',
+            'rPPG Confidence: {{ "%.4f"|format(rppg_confidence|default(0)) }}',
+            '',
+            '==========================================='
+        ].join('\n');
+
+        var blob = new Blob([reportContent], { type: 'text/plain' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'deepfake_detection_report.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+</script>
+
+{% endblock %}

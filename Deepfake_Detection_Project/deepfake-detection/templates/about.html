@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+
+<!-- About Hero Banner -->
+<section style="padding-top: 8rem; padding-bottom: 3rem; position: relative; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 30%, rgba(100,255,218,0.05) 0%, transparent 60%);"></div>
+    <div class="container position-relative" style="z-index: 2;">
+        <div class="text-center fade-in">
+            <span class="d-inline-block px-3 py-1 rounded-pill mb-3"
+                  style="background: rgba(100,255,218,0.1); border: 1px solid rgba(100,255,218,0.3); color: var(--accent); font-size: 0.85rem; font-weight: 500;">
+                <i class="fas fa-book-open me-1"></i> About The Project
+            </span>
+            <h1 class="section-title" style="font-size: 2.8rem;">Understanding DeepGuard</h1>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">A comprehensive deepfake detection system built on cutting-edge multimodal AI research.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Project Description -->
+<section style="padding: 3rem 0 5rem;">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 fade-in-left">
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; padding: 2.5rem; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), #64b5f6, var(--accent));"></div>
+                    <div class="text-center mb-4">
+                        <div style="width: 100px; height: 100px; border-radius: 50%; background: rgba(100,255,218,0.08); border: 2px solid var(--border-color); display: inline-flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-eye fa-2x" style="color: var(--accent);"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex align-items-start gap-3 p-3" style="background: rgba(100,255,218,0.04); border-radius: 12px; border: 1px solid rgba(100,255,218,0.1);">
+                            <i class="fas fa-check-circle mt-1" style="color: var(--accent);"></i>
+                            <div>
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 0.3rem;">Multimodal Fusion</h6>
+                                <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">Combines audio, visual, and physiological signals for comprehensive analysis.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start gap-3 p-3" style="background: rgba(100,255,218,0.04); border-radius: 12px; border: 1px solid rgba(100,255,218,0.1);">
+                            <i class="fas fa-check-circle mt-1" style="color: var(--accent);"></i>
+                            <div>
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 0.3rem;">Robust Against Attacks</h6>
+                                <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">Resilient to compression, resizing, and adversarial perturbation techniques.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start gap-3 p-3" style="background: rgba(100,255,218,0.04); border-radius: 12px; border: 1px solid rgba(100,255,218,0.1);">
+                            <i class="fas fa-check-circle mt-1" style="color: var(--accent);"></i>
+                            <div>
+                                <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 0.3rem;">Explainable Results</h6>
+                                <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">Provides visual heatmaps and signal plots to explain detection decisions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 fade-in-right">
+                <h2 style="color: var(--text-heading); font-weight: 700; font-size: 2rem; margin-bottom: 1rem;">Project Description</h2>
+                <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.9; margin-bottom: 1.2rem;">
+                    <strong style="color: var(--accent);">DeepGuard</strong> is an advanced deepfake video detection system that employs a novel multimodal approach to identify manipulated media content. As deepfake technology becomes increasingly sophisticated, traditional single-modality detection methods have proven insufficient.
+                </p>
+                <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.9; margin-bottom: 1.2rem;">
+                    Our system addresses this challenge by integrating <strong style="color: var(--text-heading);">lip-sync verification</strong> with <strong style="color: var(--text-heading);">remote photoplethysmography (rPPG)</strong> analysis. The lip-sync module detects audio-visual desynchronization, while the rPPG module identifies physiological signal inconsistencies that deepfake generation cannot perfectly replicate.
+                </p>
+                <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.9;">
+                    These complementary signals are fused at the decision level, creating a robust detection pipeline that achieves state-of-the-art performance across multiple benchmark datasets including FaceForensics++, Celeb-DF, and DFDC.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Objectives Section -->
+<section style="padding: 5rem 0; background: var(--bg-secondary); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="container">
+        <div class="text-center fade-in">
+            <h2 class="section-title">Project Objectives</h2>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">The key goals driving our research and development efforts.</p>
+        </div>
+        <div class="row g-4 mt-2">
+            <div class="col-lg-4 col-md-6 fade-in" style="transition-delay: 0.1s;">
+                <div class="card-dark text-center">
+                    <div class="card-icon mx-auto"><i class="fas fa-bullseye"></i></div>
+                    <h5>High Accuracy Detection</h5>
+                    <p>Achieve over 98% detection accuracy across diverse deepfake generation methods including face swapping, lip syncing, and face reenactment.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 fade-in" style="transition-delay: 0.2s;">
+                <div class="card-dark text-center">
+                    <div class="card-icon mx-auto"><i class="fas fa-universal-access"></i></div>
+                    <h5>Generalization</h5>
+                    <p>Develop models that generalize across unseen deepfake techniques, compression levels, and real-world conditions without retraining.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 fade-in" style="transition-delay: 0.3s;">
+                <div class="card-dark text-center">
+                    <div class="card-icon mx-auto"><i class="fas fa-gauge-simple-high"></i></div>
+                    <h5>Real-time Performance</h5>
+                    <p>Optimize the inference pipeline for near-real-time processing, enabling practical deployment in content moderation workflows.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 fade-in" style="transition-delay: 0.4s;">
+                <div class="card-dark text-center">
+                    <div class="card-icon mx-auto"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h5>Explainability</h5>
+                    <p>Provide transparent and interpretable detection results with visual explanations to build user trust and understanding.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 fade-in" style="transition-delay: 0.5s;">
+                <div class="card-dark text-center">
+                    <div class="card-icon mx-auto"><i class="fas fa-shield-virus"></i></div>
+                    <h5>Robustness</h5>
+                    <p>Ensure reliable detection even when videos are compressed, resized, or subjected to adversarial perturbation attacks.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 fade-in" style="transition-delay: 0.6s;">
+                <div class="card-dark text-center">
+                    <div class="card-icon mx-auto"><i class="fas fa-puzzle-piece"></i></div>
+                    <h5>Modular Architecture</h5>
+                    <p>Design a modular pipeline that allows individual components to be updated, replaced, or extended independently.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Methodology Section -->
+<section style="padding: 5rem 0;">
+    <div class="container">
+        <div class="text-center fade-in">
+            <h2 class="section-title">Methodology Overview</h2>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">Our detection pipeline consists of three parallel analysis streams fused together.</p>
+        </div>
+        <div class="row g-4 mt-3">
+            <div class="col-lg-4 fade-in" style="transition-delay: 0.1s;">
+                <div class="card-dark h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div style="width: 50px; height: 50px; border-radius: 10px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-comment-dots" style="color: var(--accent); font-size: 1.2rem;"></i>
+                        </div>
+                        <h5 class="mb-0">Stream 1: Lip Sync</h5>
+                    </div>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 1.2rem; line-height: 2.2;">
+                        <li>Extract audio features using Wav2Vec2</li>
+                        <li>Extract visual lip features via ResNet</li>
+                        <li>Compute sync confidence scores</li>
+                        <li>LSTM-based temporal analysis</li>
+                        <li>Binary classification (synced/mismatched)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 fade-in" style="transition-delay: 0.2s;">
+                <div class="card-dark h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div style="width: 50px; height: 50px; border-radius: 10px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-heart-pulse" style="color: var(--accent); font-size: 1.2rem;"></i>
+                        </div>
+                        <h5 class="mb-0">Stream 2: rPPG</h5>
+                    </div>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 1.2rem; line-height: 2.2;">
+                        <li>Face detection and ROI extraction</li>
+                        <li>Color space signal decomposition</li>
+                        <li>Bandpass filtering for pulse extraction</li>
+                        <li>CNN-based anomaly classification</li>
+                        <li>Heart rate consistency verification</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 fade-in" style="transition-delay: 0.3s;">
+                <div class="card-dark h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div style="width: 50px; height: 50px; border-radius: 10px; background: rgba(100,255,218,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-code-merge" style="color: var(--accent); font-size: 1.2rem;"></i>
+                        </div>
+                        <h5 class="mb-0">Stream 3: Fusion</h5>
+                    </div>
+                    <ul style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 1.2rem; line-height: 2.2;">
+                        <li>Feature-level and decision-level fusion</li>
+                        <li>Weighted ensemble of model predictions</li>
+                        <li>Confidence calibration and thresholding</li>
+                        <li>Meta-learner for final classification</li>
+                        <li>Result aggregation across video segments</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section style="padding: 5rem 0; background: var(--bg-secondary); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="container">
+        <div class="text-center fade-in">
+            <h2 class="section-title">Our Team</h2>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">The researchers and engineers behind DeepGuard.</p>
+        </div>
+        <div class="row g-4 mt-2 justify-content-center">
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.1s;">
+                <div class="card-dark text-center">
+                    <div style="width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, rgba(100,255,218,0.2), rgba(100,181,246,0.2)); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-user-tie fa-2x" style="color: var(--accent);"></i>
+                    </div>
+                    <h5 style="color: var(--text-heading);">Dr. Alex Chen</h5>
+                    <p style="color: var(--accent); font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Lead Researcher</p>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">PhD in Computer Vision. Specializes in multimedia forensics and deep learning.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.2s;">
+                <div class="card-dark text-center">
+                    <div style="width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, rgba(100,255,218,0.2), rgba(100,181,246,0.2)); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-user-astronaut fa-2x" style="color: var(--accent);"></i>
+                    </div>
+                    <h5 style="color: var(--text-heading);">Sarah Miller</h5>
+                    <p style="color: var(--accent); font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">ML Engineer</p>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">Expert in PyTorch, model optimization, and deploying ML systems at scale.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.3s;">
+                <div class="card-dark text-center">
+                    <div style="width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, rgba(100,255,218,0.2), rgba(100,181,246,0.2)); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-user-gear fa-2x" style="color: var(--accent);"></i>
+                    </div>
+                    <h5 style="color: var(--text-heading);">Raj Patel</h5>
+                    <p style="color: var(--accent); font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Signal Processing</p>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">Specialist in rPPG, biomedical signal analysis, and physiological computing.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 fade-in" style="transition-delay: 0.4s;">
+                <div class="card-dark text-center">
+                    <div style="width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, rgba(100,255,218,0.2), rgba(100,181,246,0.2)); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-user-pen fa-2x" style="color: var(--accent);"></i>
+                    </div>
+                    <h5 style="color: var(--text-heading);">Emily Zhang</h5>
+                    <p style="color: var(--accent); font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem;">Full-Stack Developer</p>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">Built the web interface and API. Focuses on user experience and system integration.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technology Stack Section -->
+<section style="padding: 5rem 0;">
+    <div class="container">
+        <div class="text-center fade-in">
+            <h2 class="section-title">Technology Stack</h2>
+            <div class="accent-line"></div>
+            <p class="section-subtitle">The tools and frameworks powering DeepGuard.</p>
+        </div>
+        <div class=ow g-4 mt-2">
+            <div class="col-lg-6 fade-in" style="transition-delay: 0.1s;">
+                <div class="card-dark h-100">
+                    <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 1rem;"><i class="fas fa-brain me-2" style="color: var(--accent);"></i>Deep Learning</h6>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge rounded-pill" style="background: rgba(100,255,218,0.12); color: var(--accent); border: 1px solid rgba(100,255,218,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">PyTorch</span>
+                        <span class="badge rounded-pill" style="background: rgba(100,255,218,0.12); color: var(--accent); border: 1px solid rgba(100,255,218,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">TensorFlow</span>
+                        <span class="badge rounded-pill" style="background: rgba(100,255,218,0.12); color: var(--accent); border: 1px solid rgba(100,255,218,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">Hugging Face</span>
+                        <span class="badge rounded-pill" style="background: rgba(100,255,218,0.12); color: var(--accent); border: 1px solid rgba(100,255,218,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">OpenCV</span>
+                    </div>
+                    <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 1rem;"><i class="fas fa-cubes me-2" style="color: var(--accent);"></i>Model Architectures</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge rounded-pill" style="background: rgba(100,181,246,0.12); color: #64b5f6; border: 1px solid rgba(100,181,246,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">ResNet-50</span>
+                        <span class="badge rounded-pill" style="background: rgba(100,181,246,0.12); color: #64b5f6; border: 1px solid rgba(100,181,246,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">LSTM</span>
+                        <span class="badge rounded-pill" style="background: rgba(100,181,246,0.12); color: #64b5f6; border: 1px solid rgba(100,181,246,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">Wav2Vec2</span>
+                        <span class="badge rounded-pill" style="background: rgba(100,181,246,0.12); color: #64b5f6; border: 1px solid rgba(100,181,246,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">EfficientNet</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 fade-in" style="transition-delay: 0.2s;">
+                <div class="card-dark h-100">
+                    <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 1rem;"><i class="fas fa-server me-2" style="color: var(--accent);"></i>Backend & Web</h6>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge rounded-pill" style="background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">Python</span>
+                        <span class="badge rounded-pill" style="background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">Flask</span>
+                        <span class="badge rounded-pill" style="background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">Bootstrap 5</span>
+                        <span class="badge rounded-pill" style="background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">jQuery</span>
+                    </div>
+                    <h6 style="color: var(--text-heading); font-weight: 600; margin-bottom: 1rem;"><i class="fas fa-database me-2" style="color: var(--accent);"></i>Data & Tools</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge rounded-pill" style="background: rgba(255,107,107,0.12); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">NumPy</span>
+                        <span class="badge rounded-pill" style="background: rgba(255,107,107,0.12); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">Pandas</span>
+                        <span class="badge rounded-pill" style="background: rgba(255,107,107,0.12); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">Scikit-learn</span>
+                        <span class="badge rounded-pill" style="background: rgba(255,107,107,0.12); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">Matplotlib</span>
+                        <span class="badge rounded-pill" style="background: rgba(255,107,107,0.12); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.25); padding: 0.5rem 1rem; font-size: 0.85rem;">FFmpeg</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
